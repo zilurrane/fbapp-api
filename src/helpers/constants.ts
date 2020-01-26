@@ -1,0 +1,1 @@
+export const userRoles = ['Student', 'Teacher', 'Principal', 'Admin']

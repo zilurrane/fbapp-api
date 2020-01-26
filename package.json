@@ -2,7 +2,7 @@
   "name": "fbapp-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "dev": "nodemon",
     "build": "rimraf ./build && tsc",
@@ -28,5 +28,9 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.8.9"
+  },
+  "engines": {
+    "node": "12.14.0",
+    "npm": "6.13.6"
   }
 }

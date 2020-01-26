@@ -1,0 +1,6 @@
+---
+applications:
+- name: fbapp-api
+  commands:
+          - npm run build
+          - node build/index.js

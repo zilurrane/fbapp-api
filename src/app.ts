@@ -5,6 +5,7 @@ import { UserRoutes } from './routes/userRoutes';
 import cors from 'cors';
 import mongoose from "mongoose";
 import { DepartmentRoutes } from "./routes/departmentRoutes";
+import { ClassRoutes } from "./routes/classRoutes";
 
 class App {
 
@@ -12,6 +13,7 @@ class App {
     public healthCheckRoutes: HealthCheckRoutes = new HealthCheckRoutes();
     public userRoutes: UserRoutes = new UserRoutes();
     public departmentRoutes: DepartmentRoutes = new DepartmentRoutes();
+    public classRoutes: ClassRoutes = new ClassRoutes();
     public mongoUrl: string = <string>process.env.MONGO_CON_STRING;
 
     constructor() {
@@ -21,6 +23,7 @@ class App {
 
         this.app.use('/api/users', this.userRoutes.getAllRoutes());
         this.app.use('/api/departments', this.departmentRoutes.getAllRoutes());
+        this.app.use('/api/classes', this.classRoutes.getAllRoutes());
         this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
     }
 

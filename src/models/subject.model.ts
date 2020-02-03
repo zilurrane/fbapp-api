@@ -19,6 +19,10 @@ export const SubjectSchema = new Schema({
         type: String,
         required: 'Class code is required'
     },
+    parameters: [{
+        type: String,
+        required: 'Class code is required'
+    }],
     isActive: {
         type: Boolean,
         default: true

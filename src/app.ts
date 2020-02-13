@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import { DepartmentRoutes } from "./routes/departmentRoutes";
 import { ClassRoutes } from "./routes/classRoutes";
 import { SubjectRoutes } from "./routes/subjectRoutes";
+import { FacultyRoutes } from "./routes/facultyRoutes";
 
 class App {
 
@@ -16,6 +17,7 @@ class App {
     public departmentRoutes: DepartmentRoutes = new DepartmentRoutes();
     public classRoutes: ClassRoutes = new ClassRoutes();
     public subjectRoutes: SubjectRoutes = new SubjectRoutes();
+    public facultyRoutes: FacultyRoutes = new FacultyRoutes();
     public mongoUrl: string = <string>process.env.MONGO_CON_STRING;
 
     constructor() {
@@ -27,6 +29,7 @@ class App {
         this.app.use('/api/departments', this.departmentRoutes.getAllRoutes());
         this.app.use('/api/classes', this.classRoutes.getAllRoutes());
         this.app.use('/api/subjects', this.subjectRoutes.getAllRoutes());
+        this.app.use('/api/faculties', this.facultyRoutes.getAllRoutes());
         this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
     }
 

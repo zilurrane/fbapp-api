@@ -12,6 +12,9 @@ export class HealthCheckRoutes {
         routes.route('/ping')
             .get(this.healthCheckController.ping);
 
+        routes.route('/email')
+        .get(this.healthCheckController.sendEmail);
+
         return routes;
     }
 }

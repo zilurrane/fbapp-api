@@ -21,6 +21,9 @@ export class SubjectRoutes {
         routes.route('/department/:departmentCode/class/:classCode')
             .get(this.controller.getAllSubjectsByDepartmentCodeAndClassCode)
 
+        routes.route('/link/faculty')
+            .post(this.controller.addUpdateSubjectFacultyLink)
+
         return routes;
     }
 }

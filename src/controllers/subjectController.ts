@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { SubjectModel } from '../models/subject.model';
+import { SubjectFacultyLinkModel } from '../models/subject-faculty-link.model';
 
 export class SubjectController {
 
@@ -43,4 +44,13 @@ export class SubjectController {
         });
     }
 
+    public addUpdateSubjectFacultyLink(req: Request, res: Response) {
+        const requestBody = req.body;
+        SubjectFacultyLinkModel.insertMany(requestBody, (err, response) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(response);
+        });
+    }
 }

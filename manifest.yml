@@ -1,6 +1,8 @@
 ---
 applications:
 - name: fbapp-api
+  buildpacks:
+    - nodejs_buildpack
   commands:
           - npm run build
           - node build/index.js

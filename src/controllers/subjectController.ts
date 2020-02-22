@@ -53,4 +53,14 @@ export class SubjectController {
             res.json(response);
         });
     }
+
+    public getLinkedFacultiesBySubjectId(req: Request, res: Response) {
+        const { subjectId } = req.params;
+        SubjectFacultyLinkModel.find({ 'subjectId': subjectId }, (err, response) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(response);
+        });
+    }
 }

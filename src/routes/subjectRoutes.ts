@@ -24,6 +24,8 @@ export class SubjectRoutes {
         routes.route('/link/faculty')
             .post(this.controller.addUpdateSubjectFacultyLink)
 
+        routes.route('/link/faculty/:subjectId')
+            .post(this.controller.getLinkedFacultiesBySubjectId)
         return routes;
     }
 }

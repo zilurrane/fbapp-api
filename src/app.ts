@@ -8,6 +8,7 @@ import { DepartmentRoutes } from "./routes/departmentRoutes";
 import { ClassRoutes } from "./routes/classRoutes";
 import { SubjectRoutes } from "./routes/subjectRoutes";
 import { FacultyRoutes } from "./routes/facultyRoutes";
+import graphQLServer from './graphql';
 
 class App {
 
@@ -22,6 +23,9 @@ class App {
 
     constructor() {
         this.app = express();
+
+        graphQLServer.applyMiddleware({ app: this.app, path: '/gql' });
+
         this.config();
         this.mongoSetup();
 

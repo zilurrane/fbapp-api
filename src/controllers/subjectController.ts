@@ -56,11 +56,12 @@ export class SubjectController {
 
     public getLinkedFacultiesBySubjectId(req: Request, res: Response) {
         const { subjectId } = req.params;
-        SubjectFacultyLinkModel.find({ 'subjectId': subjectId }, (err, response) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(response);
-        });
+        SubjectFacultyLinkModel.find({ 'subjectId': subjectId })
+            .then((response) => {
+                res.send(response);
+            })
+            .catch((err) => {
+                res.status(500).send(err);
+            });
     }
 }

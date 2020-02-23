@@ -56,7 +56,8 @@ export class SubjectController {
 
     public getLinkedFacultiesBySubjectId(req: Request, res: Response) {
         const { subjectId } = req.params;
-        SubjectFacultyLinkModel.find({ 'subjectId': subjectId })
+        SubjectFacultyLinkModel.find({ 'subject': subjectId })
+            .populate('faculty')
             .then((response) => {
                 res.send(response);
             })

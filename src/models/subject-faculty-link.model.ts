@@ -3,13 +3,15 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const SubjectFacultyLinkSchema = new Schema({
-    subjectId: {
-        type: String,
+    subject: {
+        type: Schema.Types.ObjectId,
         required: 'Subject id is required',
+        ref: 'Subject',
     },
-    facultyId: {
-        type: String,
+    faculty: {
+        type: Schema.Types.ObjectId,
         required: 'Faculty id is required',
+        ref: 'Faculty',
     },
     parameter: {
         type: String,

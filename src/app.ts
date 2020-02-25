@@ -1,14 +1,15 @@
 import express from "express";
 import * as bodyParser from "body-parser";
-import { HealthCheckRoutes } from "./routes/healthCheckRoutes";
-import { UserRoutes } from './routes/userRoutes';
 import cors from 'cors';
 import mongoose from "mongoose";
+import graphQLServer from './graphql';
+import { HealthCheckRoutes } from "./routes/healthCheckRoutes";
+import { UserRoutes } from './routes/userRoutes';
 import { DepartmentRoutes } from "./routes/departmentRoutes";
 import { ClassRoutes } from "./routes/classRoutes";
 import { SubjectRoutes } from "./routes/subjectRoutes";
 import { FacultyRoutes } from "./routes/facultyRoutes";
-import graphQLServer from './graphql';
+import { StudentRoutes } from "./routes/studentRoutes";
 
 class App {
 
@@ -19,6 +20,7 @@ class App {
     public classRoutes: ClassRoutes = new ClassRoutes();
     public subjectRoutes: SubjectRoutes = new SubjectRoutes();
     public facultyRoutes: FacultyRoutes = new FacultyRoutes();
+    public studentRoutes: StudentRoutes = new StudentRoutes();
     public mongoUrl: string = <string>process.env.MONGO_CON_STRING;
 
     constructor() {
@@ -34,6 +36,7 @@ class App {
         this.app.use('/api/classes', this.classRoutes.getAllRoutes());
         this.app.use('/api/subjects', this.subjectRoutes.getAllRoutes());
         this.app.use('/api/faculties', this.facultyRoutes.getAllRoutes());
+        this.app.use('/api/students', this.studentRoutes.getAllRoutes());
         this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
     }
 

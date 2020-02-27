@@ -26,7 +26,7 @@ class App {
     constructor() {
         this.app = express();
 
-        graphQLServer.applyMiddleware({ app: this.app, path: '/gql' });
+        graphQLServer.applyMiddleware({ app: this.app });
 
         this.config();
         this.mongoSetup();

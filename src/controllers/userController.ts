@@ -13,7 +13,16 @@ export class UserController {
         const { userName, password } = req.body;
         StudentModel.findOne({ userName, password })
             .then((response) => {
-                res.send(response);
+                if (response) {
+                    res.send(response);
+                }
+                else {
+                    res.status(500).send({
+                        error: {
+                            message: "Invalid username or password."
+                        }
+                    });
+                }
             })
             .catch((err) => {
                 res.status(500).send(err);

@@ -24,10 +24,32 @@ export default gql`
         isActive: Boolean
         createdDate: Date
     }
+    type FeedbackParameterOptions {
+        value: String,
+        label: String
+    }
+    input FeedbackParameterOptionsInput {
+        value: String,
+        label: String
+    }
+    type FeedbackParameter {
+        id: ID!
+        code: String
+        question: String
+        type: String
+        marks: Int
+        isActive: Boolean
+        createdDate: Date
+        options: [FeedbackParameterOptions]
+    }
     type Query {
         subjects: [Subject]
         subject(id: ID!): Subject
         students: [Student]
         studentsByDepartmentCodeClassCode(departmentCode: String, classCode: String): [Student]
+        feedbackParameters: [FeedbackParameter]
+    }
+    type Mutation {
+        addFeedbackParameter(code: String!, question: String!, type: String!, marks: Int!, options: [FeedbackParameterOptionsInput]): FeedbackParameter
     }
 `;

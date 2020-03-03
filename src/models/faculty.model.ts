@@ -3,10 +3,10 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const FacultySchema = new Schema({
-    id: {
-        type: Number,
-        required: 'Faculty Id is required',
-    },
+    // id: {
+    //     type: Number,
+    //     required: 'Faculty Id is required',
+    // },
     name: {
         type: String,
         required: 'Faculty name is required',

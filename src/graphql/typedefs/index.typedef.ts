@@ -42,12 +42,27 @@ export default gql`
         createdDate: Date
         options: [FeedbackParameterOptions]
     }
+    type Faculty {
+        id: ID!
+        name: String!
+        email: String!
+        qualification: String
+        departmentCode: String
+        classCode: String
+        isActive: Boolean
+        createdDate: Date
+    }
+    type SubjectFaculty {
+        subject: Subject
+        faculty: Faculty
+    }
     type Query {
         subjects: [Subject]
         subject(id: ID!): Subject
         students: [Student]
         studentsByDepartmentCodeClassCode(departmentCode: String, classCode: String): [Student]
         feedbackParameters: [FeedbackParameter]
+        facultiesByDepartmentCodeClassCode(departmentCode: String, classCode: String): [SubjectFaculty]
     }
     type Mutation {
         addFeedbackParameter(code: String!, question: String!, type: String!, marks: Int!, options: [FeedbackParameterOptionsInput]): FeedbackParameter

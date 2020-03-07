@@ -10,6 +10,7 @@ import { ClassRoutes } from "./routes/classRoutes";
 import { SubjectRoutes } from "./routes/subjectRoutes";
 import { FacultyRoutes } from "./routes/facultyRoutes";
 import { StudentRoutes } from "./routes/studentRoutes";
+import { FeedbackRoutes } from "./routes/feedbackRoutes";
 
 class App {
 
@@ -21,6 +22,7 @@ class App {
     public subjectRoutes: SubjectRoutes = new SubjectRoutes();
     public facultyRoutes: FacultyRoutes = new FacultyRoutes();
     public studentRoutes: StudentRoutes = new StudentRoutes();
+    public feedbackRoutes: FeedbackRoutes = new FeedbackRoutes();
     public mongoUrl: string = <string>process.env.MONGO_CON_STRING;
 
     constructor() {
@@ -37,6 +39,7 @@ class App {
         this.app.use('/api/subjects', this.subjectRoutes.getAllRoutes());
         this.app.use('/api/faculties', this.facultyRoutes.getAllRoutes());
         this.app.use('/api/students', this.studentRoutes.getAllRoutes());
+        this.app.use('/api/feedbacks', this.healthCheckRoutes.getAllRoutes());
         this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
     }
 

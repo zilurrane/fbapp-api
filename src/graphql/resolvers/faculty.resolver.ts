@@ -19,13 +19,21 @@ export default {
                     if (facultyData) {
                         faculty = { id: facultyData['_id'], name: facultyData.name, email: facultyData.email, qualification: facultyData.qualification };
                     }
-                    const existingFacultySubjectRecordIndex = facultiesByDepartmentCodeClassCode.findIndex(
-                        (facultySubjectRecord: any) => facultySubjectRecord.faculty.id.equals(faculty.id) && facultySubjectRecord.subject.id.equals(subjectRecord.subject.id)
+                    const existingFacultyRecordIndex = facultiesByDepartmentCodeClassCode.findIndex(
+                        (facultySubjectRecord: any) => facultySubjectRecord.faculty.id.equals(faculty.id)
                     );
-                    if (existingFacultySubjectRecordIndex !== -1) {
-                        facultiesByDepartmentCodeClassCode[existingFacultySubjectRecordIndex].subject.parameters.push(facultySubjectLink.parameter);
+                    if (existingFacultyRecordIndex !== -1) {
+                        const existingFacultySubjectRecordIndex = facultiesByDepartmentCodeClassCode[existingFacultyRecordIndex].subjects.findIndex(
+                            (facultySubjectRecord: any) => facultySubjectRecord.id.equals(subjectRecord.subject.id)
+                        );
+                        if(existingFacultySubjectRecordIndex !== -1) {
+                            facultiesByDepartmentCodeClassCode[existingFacultyRecordIndex].subjects[existingFacultySubjectRecordIndex].parameters.push(facultySubjectLink.parameter);
+                        }
+                        else {
+                            facultiesByDepartmentCodeClassCode[existingFacultyRecordIndex].subjects.push({ ...subjectRecord.subject, parameters: [facultySubjectLink.parameter] });
+                        }
                     } else {
-                        facultiesByDepartmentCodeClassCode.push({ subject: { ...subjectRecord.subject, parameters: [facultySubjectLink.parameter] }, faculty });
+                        facultiesByDepartmentCodeClassCode.push({ subjects: [{ ...subjectRecord.subject, parameters: [facultySubjectLink.parameter] }], faculty });
                     }
                 }));
             }));

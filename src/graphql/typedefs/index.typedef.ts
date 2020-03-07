@@ -53,7 +53,7 @@ export default gql`
         createdDate: Date
     }
     type SubjectFaculty {
-        subject: Subject
+        subjects: [Subject]
         faculty: Faculty
     }
     type Query {

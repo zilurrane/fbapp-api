@@ -39,7 +39,7 @@ class App {
         this.app.use('/api/subjects', this.subjectRoutes.getAllRoutes());
         this.app.use('/api/faculties', this.facultyRoutes.getAllRoutes());
         this.app.use('/api/students', this.studentRoutes.getAllRoutes());
-        this.app.use('/api/feedbacks', this.healthCheckRoutes.getAllRoutes());
+        this.app.use('/api/feedbacks', this.feedbackRoutes.getAllRoutes());
         this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
     }
 

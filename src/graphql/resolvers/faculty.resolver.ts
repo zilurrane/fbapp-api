@@ -1,10 +1,11 @@
 import { SubjectModel } from '../../models/subject.model';
 import { SubjectFacultyLinkModel } from '../../models/subject-faculty-link.model';
 import { FacultyModel } from '../../models/faculty.model';
+import { FeedbackModel } from '../../models/feedback.model';
 
 export default {
     Query: {
-        facultiesByDepartmentCodeClassCode: async (_parent: any, { departmentCode, classCode }: any) => {
+        facultiesByDepartmentCodeClassCode: async (_parent: any, { departmentCode, classCode, studentId }: any) => {
             let facultiesByDepartmentCodeClassCode: any[] = [];
             const subjectForGivenDepartmentClass = await SubjectModel.find({ departmentCode, classCode }).exec();
 
@@ -15,9 +16,12 @@ export default {
                 const facultiesForGivenSubject = await SubjectFacultyLinkModel.find({ subject: subject['_id'] }).exec();
                 await Promise.all(facultiesForGivenSubject.map(async (facultySubjectLink: any) => {
                     const facultyData: any = await FacultyModel.findById(facultySubjectLink.faculty).exec();
-                    let faculty: any;
+                    let faculty: any, isFeedbackSubmitted: Boolean = false;
                     if (facultyData) {
                         faculty = { id: facultyData['_id'], name: facultyData.name, email: facultyData.email, qualification: facultyData.qualification };
+                        if(studentId) {
+                          isFeedbackSubmitted = await FeedbackModel.exists({ student: studentId, faculty: faculty.id, fbNo: 1 });
+                        }
                     }
                     const existingFacultyRecordIndex = facultiesByDepartmentCodeClassCode.findIndex(
                         (facultySubjectRecord: any) => facultySubjectRecord.faculty.id.equals(faculty.id)
@@ -33,7 +37,7 @@ export default {
                             facultiesByDepartmentCodeClassCode[existingFacultyRecordIndex].subjects.push({ ...subjectRecord.subject, parameters: [facultySubjectLink.parameter] });
                         }
                     } else {
-                        facultiesByDepartmentCodeClassCode.push({ subjects: [{ ...subjectRecord.subject, parameters: [facultySubjectLink.parameter] }], faculty });
+                        facultiesByDepartmentCodeClassCode.push({ subjects: [{ ...subjectRecord.subject, parameters: [facultySubjectLink.parameter] }], isFeedbackSubmitted, faculty });
                     }
                 }));
             }));

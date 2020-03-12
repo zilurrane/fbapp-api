@@ -54,6 +54,7 @@ export default gql`
     }
     type SubjectFaculty {
         subjects: [Subject]
+        isFeedbackSubmitted: Boolean
         faculty: Faculty
     }
     type Query {
@@ -62,7 +63,7 @@ export default gql`
         students: [Student]
         studentsByDepartmentCodeClassCode(departmentCode: String, classCode: String): [Student]
         feedbackParameters: [FeedbackParameter]
-        facultiesByDepartmentCodeClassCode(departmentCode: String, classCode: String): [SubjectFaculty]
+        facultiesByDepartmentCodeClassCode(departmentCode: String, classCode: String, studentId: ID): [SubjectFaculty]
     }
     type Mutation {
         addFeedbackParameter(code: String!, question: String!, type: String!, marks: Int!, options: [FeedbackParameterOptionsInput]): FeedbackParameter

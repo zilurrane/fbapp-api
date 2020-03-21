@@ -51,7 +51,7 @@ export default {
                 let feedbackSummary = { actual: 0, expected: 0 };
                 for (let key in feedback) {
                     if (!isNaN(feedback[key])) { // This needs to be revisited
-                        feedbackSummary.actual += feedback[key];
+                        feedbackSummary.actual += Number(feedback[key]);
                         feedbackSummary.expected += 10; // This needs to be retrieved from config
                     }
                 }

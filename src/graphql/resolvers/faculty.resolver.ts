@@ -2,6 +2,7 @@ import { SubjectModel } from '../../models/subject.model';
 import { SubjectFacultyLinkModel } from '../../models/subject-faculty-link.model';
 import { FacultyModel } from '../../models/faculty.model';
 import { FeedbackModel } from '../../models/feedback.model';
+import { FeedbackParameterModel } from '../../models/feedback-parameter.model';
 
 export default {
     Query: {
@@ -43,8 +44,9 @@ export default {
             }));
             return facultiesByDepartmentCodeClassCode;
         },
+
         facultiesFeedbackSummary: async (_parent: any, { departmentCode, classCode }: any) => {
-            
+
             const getFeedbackSum = (feedback: any) => {
                 let feedbackSummary = { actual: 0, expected: 0 };
                 for (let key in feedback) {
@@ -77,6 +79,35 @@ export default {
             }
 
             return facultiesFeedbackSummary;
+        },
+
+        facultyFeedback: async (_parent: any, { departmentCode, classCode, facultyId }: any) => {
+
+            const feedbacksForGivenFaculty = await FeedbackModel.find({ departmentCode, classCode, faculty: facultyId }).exec();
+            const facultyFeedbackPerParameterMap = feedbacksForGivenFaculty.reduce((acc: any, { feedback }: any) => {
+                for (let feedbackParameterId in feedback) {
+                    if (!isNaN(feedback[feedbackParameterId])) { // This needs to be revisited
+                        if (!acc[feedbackParameterId]) {
+                            acc[feedbackParameterId] = { actual: 0, expected: 0, percentage: 0 };
+                        }
+                        acc[feedbackParameterId].actual += feedback[feedbackParameterId];
+                        acc[feedbackParameterId].expected += 10; // This needs to be retrieved from config
+                        acc[feedbackParameterId].percentage = Number(((acc[feedbackParameterId].actual / acc[feedbackParameterId].expected) * 100).toFixed(2));
+                    }
+                }
+                return acc;
+            }, {});
+            let facultyFeedbackPerParameter: any[] = [];
+            for (let feedbackParameterId in facultyFeedbackPerParameterMap) {
+                const facultyFeedbackPerParameterMapItem = facultyFeedbackPerParameterMap[feedbackParameterId];
+                const parameter = await FeedbackParameterModel.findById(feedbackParameterId).exec();
+                const facultyFeedbackPerParameterItem: any = {
+                    parameter,
+                    feedback: facultyFeedbackPerParameterMapItem
+                };
+                facultyFeedbackPerParameter.push(facultyFeedbackPerParameterItem);
+            }
+            return facultyFeedbackPerParameter;
         }
 
     }

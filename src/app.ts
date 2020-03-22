@@ -1,16 +1,17 @@
-import express from "express";
-import * as bodyParser from "body-parser";
+import express from 'express';
+import * as bodyParser from 'body-parser';
 import cors from 'cors';
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import morgan from 'morgan';
 import graphQLServer from './graphql';
-import { HealthCheckRoutes } from "./routes/healthCheckRoutes";
+import { HealthCheckRoutes } from './routes/healthCheckRoutes';
 import { UserRoutes } from './routes/userRoutes';
-import { DepartmentRoutes } from "./routes/departmentRoutes";
-import { ClassRoutes } from "./routes/classRoutes";
-import { SubjectRoutes } from "./routes/subjectRoutes";
-import { FacultyRoutes } from "./routes/facultyRoutes";
-import { StudentRoutes } from "./routes/studentRoutes";
-import { FeedbackRoutes } from "./routes/feedbackRoutes";
+import { DepartmentRoutes } from './routes/departmentRoutes';
+import { ClassRoutes } from './routes/classRoutes';
+import { SubjectRoutes } from './routes/subjectRoutes';
+import { FacultyRoutes } from './routes/facultyRoutes';
+import { StudentRoutes } from './routes/studentRoutes';
+import { FeedbackRoutes } from './routes/feedbackRoutes';
 
 class App {
 
@@ -47,14 +48,15 @@ class App {
         this.app.use(cors());
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(morgan('combined'));
     }
 
     private mongoSetup(): void {
         mongoose.Promise = global.Promise;
         mongoose.connect(this.mongoUrl).then((res: any) => {
-            console.log("--------------------------------------------------------------");
-            console.log("MongoDB connected successfully!!!");
-            console.log("--------------------------------------------------------------");
+            console.log('--------------------------------------------------------------');
+            console.log('MongoDB connected successfully!!!');
+            console.log('--------------------------------------------------------------');
         });
     }
 }

@@ -49,7 +49,13 @@ export class UserController {
 
     }
 
-    public createNewUser(req: Request, res: Response) {
-        res.status(200).json({})
+    public async createNewUser(req: Request, res: Response) {
+        const userRecordToInsert = new UserModel(req.body);
+        const userRecordResponse = await userRecordToInsert.save();
+        if (userRecordResponse && userRecordResponse._id) {
+            res.status(200).json(userRecordResponse);
+        } else {
+            res.status(500).json(userRecordResponse);
+        }
     }
 }

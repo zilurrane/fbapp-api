@@ -15,7 +15,7 @@ export class UserRoutes {
         routes.route('/login')
             .post(this.userController.login)
 
-        routes.route('/signup')
+        routes.route('/register')
             .post(this.userController.createNewUser)
 
         return routes;

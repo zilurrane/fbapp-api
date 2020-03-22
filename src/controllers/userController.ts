@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { StudentModel } from '../models/Student.model';
 import { UserModel } from '../models/user.model';
+import { studentRoleValue } from '../helpers/constants';
 
 export class UserController {
 
@@ -15,12 +16,29 @@ export class UserController {
         if (!user) {
             res.status(400).json({ error: { message: `We do not have any user with userName ${userName}.` } });
         } else {
-            user.comparePassword(password, function (err: any, isMatch: any) {
+            user.comparePassword(password, async function (err: any, isMatch: any) {
                 if (isMatch && !err) {
                     const token = "TEST_TOKEN";
+                    let roleSpecificUserData: any = {};
+                    if (user.role === studentRoleValue) {
+                        const roleSpecificUserDataResponse: any = await StudentModel.findOne({ user: user._id }).exec();
+                        if (roleSpecificUserDataResponse) {
+                            roleSpecificUserData = {
+                                departmentCode: roleSpecificUserDataResponse.departmentCode,
+                                classCode: roleSpecificUserDataResponse.classCode,
+                                rollNumber: roleSpecificUserDataResponse.rollNumber
+                            }
+                        }
+                    }
+                    const userData: any = {
+                        _id: user._id,
+                        userName: user.userName,
+                        isActive: user.isActive,
+                        role: user.role
+                    }
                     res.status(200).json({
                         message: 'Auth Passed.',
-                        data: user,
+                        data: { ...userData, ...roleSpecificUserData },
                         token,
                     })
                 } else {

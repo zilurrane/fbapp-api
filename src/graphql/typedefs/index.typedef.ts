@@ -12,16 +12,22 @@ export default gql`
         isActive: Boolean
         createdDate: Date
     }
-    type Student {
+    type User {
         id: ID!
-        rollNumber: Int
         userName: String
         password: String
-        name: String
+        role: Int
         email: String
+        isActive: Boolean
+        createdDate: Date
+    }
+    type Student {
+        id: ID!
+        user: User
+        rollNumber: Int
+        name: String
         departmentCode: String
         classCode: String
-        isActive: Boolean
         createdDate: Date
     }
     type FeedbackParameterOptions {

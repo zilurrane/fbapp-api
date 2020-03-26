@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+const mongoTenant = require('mongo-tenant');
 
 const Schema = mongoose.Schema;
 
@@ -61,4 +62,6 @@ UserSchema.methods.comparePassword = function (pw: string, cb: any) {
     })
 }
 
-export const UserModel = mongoose.model('User', UserSchema);
+UserSchema.plugin(mongoTenant);
+export const UserModel: any = mongoose.model('User', UserSchema);
+export const getTenantBoundUserModel = (tenantId: string) => UserModel.byTenant(tenantId);

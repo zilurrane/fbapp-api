@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+const mongoTenant = require('mongo-tenant');
 
 const Schema = mongoose.Schema;
 
@@ -33,4 +34,6 @@ export const SubjectSchema = new Schema({
     }
 });
 
-export const SubjectModel = mongoose.model('Subject', SubjectSchema);
+SubjectSchema.plugin(mongoTenant);
+export const SubjectModel: any = mongoose.model('Subject', SubjectSchema);
+export const getTenantBoundSubjectModel = (tenantId: string) => SubjectModel.byTenant(tenantId);

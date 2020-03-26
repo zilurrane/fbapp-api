@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+const mongoTenant = require('mongo-tenant');
 
 const Schema = mongoose.Schema;
 
@@ -19,4 +20,6 @@ export const DepartmentSchema = new Schema({
     }
 });
 
-export const DepartmentModel = mongoose.model('Department', DepartmentSchema);
+DepartmentSchema.plugin(mongoTenant);
+export const DepartmentModel: any = mongoose.model('Department', DepartmentSchema);
+export const getTenantBoundDepartmentModel = (tenantId: string) => DepartmentModel.byTenant(tenantId);

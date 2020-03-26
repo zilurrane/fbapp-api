@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+const mongoTenant = require('mongo-tenant');
 
 const Schema = mongoose.Schema;
 
@@ -34,4 +35,6 @@ export const FeedbackSchema = new Schema({
     }
 });
 
-export const FeedbackModel = mongoose.model('Feedback', FeedbackSchema);
+FeedbackSchema.plugin(mongoTenant);
+export const FeedbackModel: any = mongoose.model('Feedback', FeedbackSchema);
+export const getTenantBoundFeedbackModel = (tenantId: string) => FeedbackModel.byTenant(tenantId);

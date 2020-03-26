@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { StudentModel } from '../models/Student.model';
+import { getTenantBoundStudentModel } from '../models/Student.model';
 import { UserModel } from '../models/user.model';
-import { studentRoleValue } from '../helpers/constants';
+import { studentRoleValue, tenantId } from '../helpers/constants';
 
 export class StudentController {
 
@@ -27,7 +27,7 @@ export class StudentController {
             });
         }
 
-        StudentModel.insertMany(newStudents, (err: any, response: any) => {
+        getTenantBoundStudentModel(tenantId).insertMany(newStudents, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { FeedbackModel } from '../models/feedback.model';
+import { getTenantBoundFeedbackModel } from '../models/feedback.model';
 import IHttpResponse from '../interfaces/httpResponse.interface';
-import { errorCodes } from '../helpers/constants';
+import { errorCodes, tenantId } from '../helpers/constants';
 
 export class FeedbackController {
 
     public addFeedback(req: Request, res: Response) {
         let httpResponse: IHttpResponse<any>;
 
-        let newRecord = new FeedbackModel(req.body);
+        let newRecord = new (getTenantBoundFeedbackModel(tenantId))(req.body);
 
-        newRecord.save((err, response) => {
+        newRecord.save((err: any, response: any) => {
             if (err) {
                 httpResponse = {
                     error: {

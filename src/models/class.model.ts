@@ -23,5 +23,5 @@ export const ClassSchema = new Schema({
 });
 
 ClassSchema.plugin(mongoTenant);
-export const ClassModel: any = mongoose.model('Class', ClassSchema);
+const ClassModel: any = mongoose.model('Class', ClassSchema);
 export const getTenantBoundClassModel = (tenantId: string) => ClassModel.byTenant(tenantId);

@@ -25,5 +25,5 @@ export const SubjectFacultyLinkSchema = new Schema({
 });
 
 SubjectFacultyLinkSchema.plugin(mongoTenant);
-export const SubjectFacultyLinkModel: any = mongoose.model('SubjectFacultyLink', SubjectFacultyLinkSchema);
+const SubjectFacultyLinkModel: any = mongoose.model('SubjectFacultyLink', SubjectFacultyLinkSchema);
 export const getTenantBoundSubjectFacultyLinkModel = (tenantId: string) => SubjectFacultyLinkModel.byTenant(tenantId);

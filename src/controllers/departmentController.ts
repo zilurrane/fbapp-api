@@ -1,12 +1,13 @@
-import { DepartmentModel } from '../models/department.model';
+import { getTenantBoundDepartmentModel } from '../models/department.model';
 import { Request, Response } from 'express';
+import { tenantId } from '../helpers/constants';
 
 export class DepartmentController {
 
     public addNewDepartment(req: Request, res: Response) {
-        let newRecord = new DepartmentModel(req.body);
+        let newRecord = new (getTenantBoundDepartmentModel(tenantId))(req.body);
 
-        newRecord.save((err, response) => {
+        newRecord.save((err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -15,7 +16,7 @@ export class DepartmentController {
     }
 
     public getAllDepartments(_req: Request, res: Response) {
-        DepartmentModel.find({}, (err, response) => {
+        getTenantBoundDepartmentModel(tenantId).find({}, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

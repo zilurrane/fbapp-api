@@ -35,5 +35,5 @@ export const SubjectSchema = new Schema({
 });
 
 SubjectSchema.plugin(mongoTenant);
-export const SubjectModel: any = mongoose.model('Subject', SubjectSchema);
+const SubjectModel: any = mongoose.model('Subject', SubjectSchema);
 export const getTenantBoundSubjectModel = (tenantId: string) => SubjectModel.byTenant(tenantId);

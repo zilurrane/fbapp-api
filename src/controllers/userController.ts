@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { StudentModel } from '../models/Student.model';
-import { UserModel } from '../models/user.model';
-import { studentRoleValue } from '../helpers/constants';
+import { } from '../models/Student.model';
+import { getTenantBoundUserModel } from '../models/user.model';
+import { studentRoleValue, tenantId } from '../helpers/constants';
 
 export class UserController {
 
@@ -12,7 +12,7 @@ export class UserController {
     // TODO: Refactor this
     public async login(req: Request, res: Response) {
         const { userName, password } = req.body;
-        const user: any = await UserModel.findOne({ userName }).exec();
+        const user: any = await (getTenantBoundUserModel(tenantId)).findOne({ userName }).exec();
         if (!user) {
             res.status(400).json({ error: { message: `We do not have any user with userName ${userName}.` } });
         } else {
@@ -21,7 +21,7 @@ export class UserController {
                     const token = "TEST_TOKEN";
                     let roleSpecificUserData: any = {};
                     if (user.role === studentRoleValue) {
-                        const roleSpecificUserDataResponse: any = await StudentModel.findOne({ user: user._id }).exec();
+                        const roleSpecificUserDataResponse: any = await getTenantBoundUserModel(tenantId).findOne({ user: user._id }).exec();
                         if (roleSpecificUserDataResponse) {
                             roleSpecificUserData = {
                                 departmentCode: roleSpecificUserDataResponse.departmentCode,
@@ -50,7 +50,7 @@ export class UserController {
     }
 
     public async createNewUser(req: Request, res: Response) {
-        const userRecordToInsert = new UserModel(req.body);
+        const userRecordToInsert = new (getTenantBoundUserModel(tenantId))(req.body);
         const userRecordResponse = await userRecordToInsert.save();
         if (userRecordResponse && userRecordResponse._id) {
             res.status(200).json(userRecordResponse);

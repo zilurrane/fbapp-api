@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+const mongoTenant = require('mongo-tenant');
 
 const Schema = mongoose.Schema;
 
@@ -35,4 +36,6 @@ export const FacultySchema = new Schema({
     }
 });
 
-export const FacultyModel = mongoose.model('Faculty', FacultySchema);
+FacultySchema.plugin(mongoTenant);
+const FacultyModel: any = mongoose.model('Faculty', FacultySchema);
+export const getTenantBoundFacultyModel = (tenantId: string) => FacultyModel.byTenant(tenantId);

@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+const mongoTenant = require('mongo-tenant');
 
 const Schema = mongoose.Schema;
 
@@ -21,4 +22,6 @@ export const ClassSchema = new Schema({
     }
 });
 
-export const ClassModel = mongoose.model('Class', ClassSchema);
+ClassSchema.plugin(mongoTenant);
+const ClassModel: any = mongoose.model('Class', ClassSchema);
+export const getTenantBoundClassModel = (tenantId: string) => ClassModel.byTenant(tenantId);

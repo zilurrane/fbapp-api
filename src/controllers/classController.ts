@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
-import { ClassModel } from '../models/class.model';
+import { getTenantBoundClassModel } from '../models/class.model';
+import { tenantId } from '../helpers/constants';
 
 export class ClassController {
 
     public addNewClass(req: Request, res: Response) {
-        let newRecord = new ClassModel(req.body);
+        let newRecord = new (getTenantBoundClassModel(tenantId))(req.body);
 
-        newRecord.save((err, response) => {
+        newRecord.save((err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -15,7 +16,7 @@ export class ClassController {
     }
 
     public getAllClasses(_req: Request, res: Response) {
-        ClassModel.find({}, (err, response) => {
+        getTenantBoundClassModel(tenantId).find({}, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -25,7 +26,7 @@ export class ClassController {
 
     public getAllClassesByDepartmentCode(req: Request, res: Response) {
         const { departmentCode } = req.params;
-        ClassModel.find({ 'departmentCode': departmentCode }, (err, response) => {
+        getTenantBoundClassModel(tenantId).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

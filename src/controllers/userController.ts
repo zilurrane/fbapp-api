@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { StudentModel } from '../models/Student.model';
-import { UserModel } from '../models/user.model';
-import { studentRoleValue } from '../helpers/constants';
+import { getTenantBoundUserModel, UserModel } from '../models/user.model';
+import { studentRoleValue, tenantId } from '../helpers/constants';
+import { getTenantBoundStudentModel } from '../models/Student.model';
 
 export class UserController {
 
@@ -21,7 +21,7 @@ export class UserController {
                     const token = "TEST_TOKEN";
                     let roleSpecificUserData: any = {};
                     if (user.role === studentRoleValue) {
-                        const roleSpecificUserDataResponse: any = await StudentModel.findOne({ user: user._id }).exec();
+                        const roleSpecificUserDataResponse: any = await getTenantBoundStudentModel(user.tenantId).findOne({ user: user._id }).exec();
                         if (roleSpecificUserDataResponse) {
                             roleSpecificUserData = {
                                 departmentCode: roleSpecificUserDataResponse.departmentCode,
@@ -50,7 +50,7 @@ export class UserController {
     }
 
     public async createNewUser(req: Request, res: Response) {
-        const userRecordToInsert = new UserModel(req.body);
+        const userRecordToInsert = new (getTenantBoundUserModel(tenantId))(req.body);
         const userRecordResponse = await userRecordToInsert.save();
         if (userRecordResponse && userRecordResponse._id) {
             res.status(200).json(userRecordResponse);

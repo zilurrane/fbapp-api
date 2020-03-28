@@ -11,3 +11,5 @@ export const studentRoleValue = 5;
 export const errorCodes = {
     INSERT_FAILED: 9001
 }
+
+export const tenantId = "1";

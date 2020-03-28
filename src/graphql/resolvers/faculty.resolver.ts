@@ -1,27 +1,28 @@
-import { SubjectModel } from '../../models/subject.model';
-import { SubjectFacultyLinkModel } from '../../models/subject-faculty-link.model';
-import { FacultyModel } from '../../models/faculty.model';
-import { FeedbackModel } from '../../models/feedback.model';
-import { FeedbackParameterModel } from '../../models/feedback-parameter.model';
+import { getTenantBoundSubjectModel } from '../../models/subject.model';
+import { getTenantBoundSubjectFacultyLinkModel } from '../../models/subject-faculty-link.model';
+import { getTenantBoundFacultyModel } from '../../models/faculty.model';
+import { getTenantBoundFeedbackModel } from '../../models/feedback.model';
+import { getTenantBoundFeedbackParameterModel } from '../../models/feedback-parameter.model';
+import { tenantId } from '../../helpers/constants';
 
 export default {
     Query: {
         facultiesByDepartmentCodeClassCode: async (_parent: any, { departmentCode, classCode, studentId }: any) => {
             let facultiesByDepartmentCodeClassCode: any[] = [];
-            const subjectForGivenDepartmentClass = await SubjectModel.find({ departmentCode, classCode }).exec();
+            const subjectForGivenDepartmentClass = await (getTenantBoundSubjectModel(tenantId)).find({ departmentCode, classCode }).exec();
 
             if (!subjectForGivenDepartmentClass) return facultiesByDepartmentCodeClassCode;
 
             await Promise.all(subjectForGivenDepartmentClass.map(async (subject: any) => {
                 const subjectRecord = { subject: { id: subject['_id'], name: subject.name, code: subject.code } };
-                const facultiesForGivenSubject = await SubjectFacultyLinkModel.find({ subject: subject['_id'] }).exec();
+                const facultiesForGivenSubject = await (getTenantBoundSubjectFacultyLinkModel(tenantId)).find({ subject: subject['_id'] }).exec();
                 await Promise.all(facultiesForGivenSubject.map(async (facultySubjectLink: any) => {
-                    const facultyData: any = await FacultyModel.findById(facultySubjectLink.faculty).exec();
+                    const facultyData: any = await getTenantBoundFacultyModel(tenantId).findById(facultySubjectLink.faculty).exec();
                     let faculty: any, isFeedbackSubmitted: Boolean = false;
                     if (facultyData) {
                         faculty = { id: facultyData['_id'], name: facultyData.name, email: facultyData.email, qualification: facultyData.qualification };
                         if (studentId) {
-                            isFeedbackSubmitted = await FeedbackModel.exists({ student: studentId, faculty: faculty.id, fbNo: 1 });
+                            isFeedbackSubmitted = await getTenantBoundFeedbackModel(tenantId).exists({ student: studentId, faculty: faculty.id, fbNo: 1 });
                         }
                     }
                     const existingFacultyRecordIndex = facultiesByDepartmentCodeClassCode.findIndex(
@@ -59,7 +60,7 @@ export default {
             }
 
             let facultiesFeedbackSummary: any = [];
-            const departmentClassFeedbacks: any[] = await FeedbackModel.find({ departmentCode, classCode }).exec();
+            const departmentClassFeedbacks: any[] = await getTenantBoundFeedbackModel(tenantId).find({ departmentCode, classCode }).exec();
             const perFacultyFeedback = departmentClassFeedbacks.reduce((acc: any, feedback: any) => {
                 if (!acc[feedback.faculty]) {
                     acc[feedback.faculty] = { actual: 0, expected: 0, percentage: 0 };
@@ -73,7 +74,7 @@ export default {
             }, {});
 
             for (let facultyId in perFacultyFeedback) {
-                const faculty: any = await FacultyModel.findById(facultyId).exec();
+                const faculty: any = await getTenantBoundFacultyModel(tenantId).findById(facultyId).exec();
                 const facultyFeedbackSummary = { faculty, feedback: perFacultyFeedback[facultyId] };
                 facultiesFeedbackSummary.push(facultyFeedbackSummary);
             }
@@ -83,7 +84,7 @@ export default {
 
         facultyFeedback: async (_parent: any, { departmentCode, classCode, facultyId }: any) => {
 
-            const feedbacksForGivenFaculty = await FeedbackModel.find({ departmentCode, classCode, faculty: facultyId }).exec();
+            const feedbacksForGivenFaculty = await getTenantBoundFeedbackModel(tenantId).find({ departmentCode, classCode, faculty: facultyId }).exec();
             const facultyFeedbackPerParameterMap = feedbacksForGivenFaculty.reduce((acc: any, { feedback }: any) => {
                 for (let feedbackParameterId in feedback) {
                     if (!isNaN(feedback[feedbackParameterId])) { // This needs to be revisited
@@ -100,7 +101,7 @@ export default {
             let facultyFeedbackPerParameter: any[] = [];
             for (let feedbackParameterId in facultyFeedbackPerParameterMap) {
                 const facultyFeedbackPerParameterMapItem = facultyFeedbackPerParameterMap[feedbackParameterId];
-                const parameter = await FeedbackParameterModel.findById(feedbackParameterId).exec();
+                const parameter = await getTenantBoundFeedbackParameterModel(tenantId).findById(feedbackParameterId).exec();
                 const facultyFeedbackPerParameterItem: any = {
                     parameter,
                     feedback: facultyFeedbackPerParameterMapItem

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { StudentModel } from '../models/Student.model';
-import { UserModel } from '../models/user.model';
-import { studentRoleValue } from '../helpers/constants';
+import { getTenantBoundStudentModel } from '../models/Student.model';
+import { getTenantBoundUserModel } from '../models/user.model';
+import { studentRoleValue, tenantId } from '../helpers/constants';
 
 export class StudentController {
 
@@ -13,7 +13,7 @@ export class StudentController {
         let newStudents: any[] = [];
         for (let currentStudentRollNumber: number = startingRollNumber; currentStudentRollNumber <= endingRollNumber; currentStudentRollNumber++) {
             const userName = getStudentUserName(departmentCode, classCode, currentStudentRollNumber);
-            const userRecordToInsert = new UserModel({
+            const userRecordToInsert = new (getTenantBoundUserModel(tenantId))({
                 userName,
                 password: userName,
                 role: studentRoleValue,
@@ -27,7 +27,7 @@ export class StudentController {
             });
         }
 
-        StudentModel.insertMany(newStudents, (err: any, response: any) => {
+        getTenantBoundStudentModel(tenantId).insertMany(newStudents, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

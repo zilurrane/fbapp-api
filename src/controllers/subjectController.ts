@@ -6,7 +6,7 @@ import { tenantId } from '../helpers/constants';
 export class SubjectController {
 
     public addNewSubject(req: Request, res: Response) {
-        let newRecord = new (getTenantBoundSubjectModel(tenantId))(req.body);
+        let newRecord = new (getTenantBoundSubjectModel(req.user))(req.body);
 
         newRecord.save((err: any, response: any) => {
             if (err) {
@@ -16,8 +16,8 @@ export class SubjectController {
         });
     }
 
-    public getAllSubjects(_req: Request, res: Response) {
-        getTenantBoundSubjectModel(tenantId).find({}, (err: any, response: any) => {
+    public getAllSubjects(req: Request, res: Response) {
+        getTenantBoundSubjectModel(req.user).find({}, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -27,7 +27,7 @@ export class SubjectController {
 
     public getAllSubjectsByDepartmentCode(req: Request, res: Response) {
         const { departmentCode } = req.params;
-        getTenantBoundSubjectModel(tenantId).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
+        getTenantBoundSubjectModel(req.user).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -37,7 +37,7 @@ export class SubjectController {
 
     public getAllSubjectsByDepartmentCodeAndClassCode(req: Request, res: Response) {
         const { departmentCode, classCode } = req.params;
-        getTenantBoundSubjectModel(tenantId).find({ 'departmentCode': departmentCode, 'classCode': classCode }, (err: any, response: any) => {
+        getTenantBoundSubjectModel(req.user).find({ 'departmentCode': departmentCode, 'classCode': classCode }, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -47,7 +47,7 @@ export class SubjectController {
 
     public addUpdateSubjectFacultyLink(req: Request, res: Response) {
         const requestBody = req.body;
-        getTenantBoundSubjectFacultyLinkModel(tenantId).insertMany(requestBody, (err: any, response: any) => {
+        getTenantBoundSubjectFacultyLinkModel(req.user).insertMany(requestBody, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -57,7 +57,7 @@ export class SubjectController {
 
     public getLinkedFacultiesBySubjectId(req: Request, res: Response) {
         const { subjectId } = req.params;
-        getTenantBoundSubjectFacultyLinkModel(tenantId).find({ 'subject': subjectId })
+        getTenantBoundSubjectFacultyLinkModel(req.user).find({ 'subject': subjectId })
             .populate('faculty')
             .then((response: any) => {
                 res.send(response);

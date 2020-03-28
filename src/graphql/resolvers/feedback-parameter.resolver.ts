@@ -1,14 +1,13 @@
 import { getTenantBoundFeedbackParameterModel } from '../../models/feedback-parameter.model';
-import { tenantId } from '../../helpers/constants';
 
 export default {
     Query: {
-        feedbackParameters: async () => await getTenantBoundFeedbackParameterModel(tenantId).find({}).exec(),
+        feedbackParameters: async (_parent: any, _args: any, { user } : any) => await getTenantBoundFeedbackParameterModel(user).find({}).exec(),
     },
     Mutation: {
-        addFeedbackParameter: async (_parent: any, args: any) => {
+        addFeedbackParameter: async (_parent: any, args: any, { user } : any) => {
             try {
-                const feedbackParameterToInsert = new (getTenantBoundFeedbackParameterModel(tenantId))(args);
+                const feedbackParameterToInsert = new (getTenantBoundFeedbackParameterModel(user))(args);
                 let response = await feedbackParameterToInsert.save();
                 return response;
             } catch (e) {

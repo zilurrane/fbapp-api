@@ -8,7 +8,7 @@ export class FeedbackController {
     public addFeedback(req: Request, res: Response) {
         let httpResponse: IHttpResponse<any>;
 
-        let newRecord = new (getTenantBoundFeedbackModel(tenantId))(req.body);
+        let newRecord = new (getTenantBoundFeedbackModel(req.user))(req.body);
 
         newRecord.save((err: any, response: any) => {
             if (err) {

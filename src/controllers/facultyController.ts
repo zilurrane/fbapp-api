@@ -5,7 +5,7 @@ import { tenantId } from '../helpers/constants';
 export class FacultyController {
 
     public addNewFaculty(req: Request, res: Response) {
-        let newRecord = new (getTenantBoundFacultyModel(tenantId))(req.body);
+        let newRecord = new (getTenantBoundFacultyModel(req.user))(req.body);
 
         newRecord.save((err: any, response: any) => {
             if (err) {
@@ -15,8 +15,8 @@ export class FacultyController {
         });
     }
 
-    public getAllFaculties(_req: Request, res: Response) {
-        getTenantBoundFacultyModel(tenantId).find({}, (err: any, response: any) => {
+    public getAllFaculties(req: Request, res: Response) {
+        getTenantBoundFacultyModel(req.user).find({}, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -26,7 +26,7 @@ export class FacultyController {
 
     public getAllFacultiesByDepartmentCode(req: Request, res: Response) {
         const { departmentCode } = req.params;
-        getTenantBoundFacultyModel(tenantId).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
+        getTenantBoundFacultyModel(req.user).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -36,7 +36,7 @@ export class FacultyController {
 
     public getAllFacultiesByDepartmentCodeAndClassCode(req: Request, res: Response) {
         const { departmentCode, classCode } = req.params;
-        getTenantBoundFacultyModel(tenantId).find({ 'departmentCode': departmentCode, 'classCode': classCode }, (err: any, response: any) => {
+        getTenantBoundFacultyModel(req.user).find({ 'departmentCode': departmentCode, 'classCode': classCode }, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

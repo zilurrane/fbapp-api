@@ -32,4 +32,4 @@ export const StudentSchema = new Schema({
 
 StudentSchema.plugin(mongoTenant);
 const StudentModel: any = mongoose.model('Student', StudentSchema);
-export const getTenantBoundStudentModel = (tenantId: string) => StudentModel.byTenant(tenantId);
+export const getTenantBoundStudentModel = (user: any) => StudentModel.byTenant(user.tenantId);

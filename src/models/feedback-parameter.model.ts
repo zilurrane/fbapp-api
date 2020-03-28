@@ -38,4 +38,4 @@ export const FeedbackParameterSchema = new Schema({
 
 FeedbackParameterSchema.plugin(mongoTenant);
 const FeedbackParameterModel: any = mongoose.model('FeedbackParameter', FeedbackParameterSchema);
-export const getTenantBoundFeedbackParameterModel = (tenantId: string) => FeedbackParameterModel.byTenant(tenantId);
+export const getTenantBoundFeedbackParameterModel = (user: any) => FeedbackParameterModel.byTenant(user.tenantId);

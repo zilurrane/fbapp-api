@@ -1,9 +1,8 @@
 import { getTenantBoundSubjectModel } from '../../models/subject.model';
-import { tenantId } from '../../helpers/constants';
 
 export default {
     Query: {
-        subjects: async () => await getTenantBoundSubjectModel(tenantId).find({}).exec(),
-        subject: async (_parent: any, { id }: any) => await getTenantBoundSubjectModel(tenantId).findById(id).exec()
+        subjects: async (_parent: any, _args: any, { user }: any) => await getTenantBoundSubjectModel(user).find({}).exec(),
+        subject: async (_parent: any, { id }: any, { user }: any) => await getTenantBoundSubjectModel(user).findById(id).exec()
     }
 };

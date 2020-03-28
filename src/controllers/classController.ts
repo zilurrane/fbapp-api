@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import { getTenantBoundClassModel } from '../models/class.model';
-import { tenantId } from '../helpers/constants';
 
 export class ClassController {
 
     public addNewClass(req: Request, res: Response) {
-        let newRecord = new (getTenantBoundClassModel(tenantId))(req.body);
+        let newRecord = new (getTenantBoundClassModel(req.user))(req.body);
 
         newRecord.save((err: any, response: any) => {
             if (err) {
@@ -15,8 +14,8 @@ export class ClassController {
         });
     }
 
-    public getAllClasses(_req: Request, res: Response) {
-        getTenantBoundClassModel(tenantId).find({}, (err: any, response: any) => {
+    public getAllClasses(req: Request, res: Response) {
+        getTenantBoundClassModel(req.user).find({}, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -26,7 +25,7 @@ export class ClassController {
 
     public getAllClassesByDepartmentCode(req: Request, res: Response) {
         const { departmentCode } = req.params;
-        getTenantBoundClassModel(tenantId).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
+        getTenantBoundClassModel(req.user).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

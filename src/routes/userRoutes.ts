@@ -12,9 +12,6 @@ export class UserRoutes {
         routes.route('/')
             .get(this.userController.listAllUsers)
 
-        routes.route('/login')
-            .post(this.userController.login)
-
         routes.route('/register')
             .post(this.userController.createNewUser)
 

@@ -14,11 +14,13 @@ import { FacultyRoutes } from './routes/facultyRoutes';
 import { StudentRoutes } from './routes/studentRoutes';
 import { FeedbackRoutes } from './routes/feedbackRoutes';
 import { jwtStrategy } from './helpers/jwtStrategy';
+import { AuthRoutes } from './routes/authRoutes';
 
 class App {
 
     public app: express.Application;
     public healthCheckRoutes: HealthCheckRoutes = new HealthCheckRoutes();
+    public authRoutes: AuthRoutes = new AuthRoutes();
     public userRoutes: UserRoutes = new UserRoutes();
     public departmentRoutes: DepartmentRoutes = new DepartmentRoutes();
     public classRoutes: ClassRoutes = new ClassRoutes();
@@ -36,7 +38,8 @@ class App {
         this.config();
         this.mongoSetup();
 
-        this.app.use('/api/users', this.userRoutes.getAllRoutes());
+        this.app.use('/api/auth', this.authRoutes.getAllRoutes());
+        this.app.use('/api/users', this.getPassportAuthenticatorMiddleware(), this.userRoutes.getAllRoutes());
         this.app.use('/api/departments', this.getPassportAuthenticatorMiddleware(), this.departmentRoutes.getAllRoutes());
         this.app.use('/api/classes', this.getPassportAuthenticatorMiddleware(), this.classRoutes.getAllRoutes());
         this.app.use('/api/subjects', this.getPassportAuthenticatorMiddleware(), this.subjectRoutes.getAllRoutes());

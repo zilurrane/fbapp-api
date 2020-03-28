@@ -13,3 +13,7 @@ export const errorCodes = {
 }
 
 export const tenantId = "1";
+
+export const jwtSecretKey = '7361a1e95859907116daedcade736e6465b1440ada579bb94a3a3141ae651820'; // TODO: Implement use of process.env.JWT_SECRET
+
+export const jwtExpiryTime = 120;

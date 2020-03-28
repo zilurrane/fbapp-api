@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import passport from 'passport'
 import graphQLServer from './graphql';
 import { HealthCheckRoutes } from './routes/healthCheckRoutes';
 import { UserRoutes } from './routes/userRoutes';
@@ -12,6 +13,7 @@ import { SubjectRoutes } from './routes/subjectRoutes';
 import { FacultyRoutes } from './routes/facultyRoutes';
 import { StudentRoutes } from './routes/studentRoutes';
 import { FeedbackRoutes } from './routes/feedbackRoutes';
+import { jwtStrategy } from './helpers/jwtStrategy';
 
 class App {
 
@@ -35,12 +37,12 @@ class App {
         this.mongoSetup();
 
         this.app.use('/api/users', this.userRoutes.getAllRoutes());
-        this.app.use('/api/departments', this.departmentRoutes.getAllRoutes());
-        this.app.use('/api/classes', this.classRoutes.getAllRoutes());
-        this.app.use('/api/subjects', this.subjectRoutes.getAllRoutes());
-        this.app.use('/api/faculties', this.facultyRoutes.getAllRoutes());
-        this.app.use('/api/students', this.studentRoutes.getAllRoutes());
-        this.app.use('/api/feedbacks', this.feedbackRoutes.getAllRoutes());
+        this.app.use('/api/departments', this.getPassportAuthenticatorMiddleware(), this.departmentRoutes.getAllRoutes());
+        this.app.use('/api/classes', this.getPassportAuthenticatorMiddleware(), this.classRoutes.getAllRoutes());
+        this.app.use('/api/subjects', this.getPassportAuthenticatorMiddleware(), this.subjectRoutes.getAllRoutes());
+        this.app.use('/api/faculties', this.getPassportAuthenticatorMiddleware(), this.facultyRoutes.getAllRoutes());
+        this.app.use('/api/students', this.getPassportAuthenticatorMiddleware(), this.studentRoutes.getAllRoutes());
+        this.app.use('/api/feedbacks', this.getPassportAuthenticatorMiddleware(), this.feedbackRoutes.getAllRoutes());
         this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
     }
 
@@ -49,6 +51,7 @@ class App {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(morgan('combined'));
+        passport.use(jwtStrategy);
     }
 
     private mongoSetup(): void {
@@ -58,6 +61,10 @@ class App {
             console.log('MongoDB connected successfully!!!');
             console.log('--------------------------------------------------------------');
         });
+    }
+
+    private getPassportAuthenticatorMiddleware() {
+        return passport.authenticate('jwt', { session: false });
     }
 }
 

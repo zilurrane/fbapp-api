@@ -19,8 +19,7 @@ export const UserSchema = new Schema({
         required: 'Role is required'
     },
     email: {
-        type: String,
-        unique: true
+        type: String
     },
     isActive: {
         type: Boolean,
@@ -63,5 +62,5 @@ UserSchema.methods.comparePassword = function (pw: string, cb: any) {
 }
 
 UserSchema.plugin(mongoTenant);
-const UserModel: any = mongoose.model('User', UserSchema);
+export const UserModel: any = mongoose.model('User', UserSchema);
 export const getTenantBoundUserModel = (tenantId: string) => UserModel.byTenant(tenantId);

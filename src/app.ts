@@ -15,12 +15,14 @@ import { StudentRoutes } from './routes/studentRoutes';
 import { FeedbackRoutes } from './routes/feedbackRoutes';
 import { jwtStrategy } from './helpers/jwtStrategy';
 import { AuthRoutes } from './routes/authRoutes';
+import { TenantRoutes } from './routes/tenantRoutes';
 
 class App {
 
     public app: express.Application;
     public healthCheckRoutes: HealthCheckRoutes = new HealthCheckRoutes();
     public authRoutes: AuthRoutes = new AuthRoutes();
+    public tenantRoutes: TenantRoutes = new TenantRoutes();
     public userRoutes: UserRoutes = new UserRoutes();
     public departmentRoutes: DepartmentRoutes = new DepartmentRoutes();
     public classRoutes: ClassRoutes = new ClassRoutes();
@@ -38,6 +40,7 @@ class App {
         this.initializeGraphQL();
 
         this.app.use('/api/auth', this.authRoutes.getAllRoutes());
+        this.app.use('/api/tenants', this.getPassportAuthenticatorMiddleware(), this.tenantRoutes.getAllRoutes());
         this.app.use('/api/users', this.getPassportAuthenticatorMiddleware(), this.userRoutes.getAllRoutes());
         this.app.use('/api/departments', this.getPassportAuthenticatorMiddleware(), this.departmentRoutes.getAllRoutes());
         this.app.use('/api/classes', this.getPassportAuthenticatorMiddleware(), this.classRoutes.getAllRoutes());
@@ -54,10 +57,10 @@ class App {
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(morgan('combined'));
         passport.use(jwtStrategy);
-        this.app.post('/graphql',this.getPassportAuthenticatorMiddleware());
+        this.app.post('/graphql', this.getPassportAuthenticatorMiddleware());
     }
 
-    initializeGraphQL() {    
+    initializeGraphQL() {
         graphQLServer.applyMiddleware({ app: this.app });
     }
 

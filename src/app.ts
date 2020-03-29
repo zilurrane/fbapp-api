@@ -54,6 +54,7 @@ class App {
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(morgan('combined'));
         passport.use(jwtStrategy);
+        this.app.post('/graphql',this.getPassportAuthenticatorMiddleware());
     }
 
     initializeGraphQL() {    

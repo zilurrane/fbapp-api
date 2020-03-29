@@ -33,10 +33,9 @@ class App {
     constructor() {
         this.app = express();
 
-        graphQLServer.applyMiddleware({ app: this.app });
-
         this.config();
         this.mongoSetup();
+        this.initializeGraphQL();
 
         this.app.use('/api/auth', this.authRoutes.getAllRoutes());
         this.app.use('/api/users', this.getPassportAuthenticatorMiddleware(), this.userRoutes.getAllRoutes());
@@ -55,6 +54,10 @@ class App {
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(morgan('combined'));
         passport.use(jwtStrategy);
+    }
+
+    initializeGraphQL() {    
+        graphQLServer.applyMiddleware({ app: this.app });
     }
 
     private mongoSetup(): void {

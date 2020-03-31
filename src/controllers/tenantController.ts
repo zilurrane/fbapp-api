@@ -3,7 +3,7 @@ import { TenantModel } from '../models/tenant.model';
 
 export class TenantController {
 
-    public getAllTenants(res: Response) {
+    public getAllTenants(_req: Request, res: Response) {
         TenantModel.find({}, (err: any, response: any) => {
             if (err) {
                 res.status(500).send(err);

@@ -13,7 +13,7 @@ export class StudentController {
         let newStudents: any[] = [];
         for (let currentStudentRollNumber: number = startingRollNumber; currentStudentRollNumber <= endingRollNumber; currentStudentRollNumber++) {
             const userName = getStudentUserName(departmentCode, classCode, currentStudentRollNumber);
-            const userRecordToInsert = new (getTenantBoundUserModel(req.user))({
+            const userRecordToInsert = new (getTenantBoundUserModel(req))({
                 userName,
                 password: userName,
                 role: studentRoleValue,
@@ -27,7 +27,7 @@ export class StudentController {
             });
         }
 
-        getTenantBoundStudentModel(req.user).insertMany(newStudents, (err: any, response: any) => {
+        getTenantBoundStudentModel(req).insertMany(newStudents, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

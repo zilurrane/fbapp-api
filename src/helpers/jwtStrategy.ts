@@ -9,7 +9,7 @@ const opts = {
 
 export const jwtStrategy = new Strategy(opts, (jwt_payload: any, done: any) => {
     const { tenantId, userName } = jwt_payload;
-    getTenantBoundUserModel({ tenantId }).findOne({ userName }, (err: any, user: any) => { // TODO: Implement interfaces
+    getTenantBoundUserModel({ user: { tenantId } }).findOne({ userName }, (err: any, user: any) => { // TODO: Implement interfaces
         if (err) {
             return done(err, false)
         }

@@ -22,4 +22,4 @@ export const DepartmentSchema = new Schema({
 
 DepartmentSchema.plugin(mongoTenant);
 const DepartmentModel: any = mongoose.model('Department', DepartmentSchema);
-export const getTenantBoundDepartmentModel = (user: any) => DepartmentModel.byTenant(user.tenantId);
+export const getTenantBoundDepartmentModel = (req: any) => DepartmentModel.byTenant(req.user.tenantId == '0' ? req.header('TenantId'): req.user.tenantId);

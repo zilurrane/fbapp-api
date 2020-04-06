@@ -24,4 +24,4 @@ export const ClassSchema = new Schema({
 
 ClassSchema.plugin(mongoTenant);
 const ClassModel: any = mongoose.model('Class', ClassSchema);
-export const getTenantBoundClassModel = (user: any) => ClassModel.byTenant(user.tenantId);
+export const getTenantBoundClassModel = (req: any) => ClassModel.byTenant(req.user.tenantId == '0' ? req.header('TenantId'): req.user.tenantId);

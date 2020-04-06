@@ -38,4 +38,4 @@ export const FacultySchema = new Schema({
 
 FacultySchema.plugin(mongoTenant);
 const FacultyModel: any = mongoose.model('Faculty', FacultySchema);
-export const getTenantBoundFacultyModel = (user: any) => FacultyModel.byTenant(user.tenantId);
+export const getTenantBoundFacultyModel = (req: any) => FacultyModel.byTenant(req.user.tenantId == '0' ? req.header('TenantId'): req.user.tenantId);

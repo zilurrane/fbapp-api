@@ -63,4 +63,4 @@ UserSchema.methods.comparePassword = function (pw: string, cb: any) {
 
 UserSchema.plugin(mongoTenant);
 export const UserModel: any = mongoose.model('User', UserSchema);
-export const getTenantBoundUserModel = (user: any) => UserModel.byTenant(user.tenantId);
+export const getTenantBoundUserModel = (req: any) => UserModel.byTenant(req.user.tenantId);

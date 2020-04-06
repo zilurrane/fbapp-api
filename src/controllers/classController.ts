@@ -4,7 +4,7 @@ import { getTenantBoundClassModel } from '../models/class.model';
 export class ClassController {
 
     public addNewClass(req: Request, res: Response) {
-        let newRecord = new (getTenantBoundClassModel(req.user))(req.body);
+        let newRecord = new (getTenantBoundClassModel(req))(req.body);
 
         newRecord.save((err: any, response: any) => {
             if (err) {
@@ -15,7 +15,7 @@ export class ClassController {
     }
 
     public getAllClasses(req: Request, res: Response) {
-        getTenantBoundClassModel(req.user).find({}, (err: any, response: any) => {
+        getTenantBoundClassModel(req).find({}, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }
@@ -25,7 +25,7 @@ export class ClassController {
 
     public getAllClassesByDepartmentCode(req: Request, res: Response) {
         const { departmentCode } = req.params;
-        getTenantBoundClassModel(req.user).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
+        getTenantBoundClassModel(req).find({ 'departmentCode': departmentCode }, (err: any, response: any) => {
             if (err) {
                 res.send(err);
             }

@@ -9,7 +9,7 @@ export class UserController {
     }
 
     public async createNewUser(req: Request, res: Response) {
-        const userRecordToInsert = new (getTenantBoundUserModel(req.user))(req.body);
+        const userRecordToInsert = new (getTenantBoundUserModel(req))(req.body);
         const userRecordResponse = await userRecordToInsert.save();
         if (userRecordResponse && userRecordResponse._id) {
             res.status(200).json(userRecordResponse);

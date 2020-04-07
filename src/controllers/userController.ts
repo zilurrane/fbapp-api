@@ -1,11 +1,15 @@
 import { Request, Response } from 'express'
 import { getTenantBoundUserModel } from '../models/user.model';
-import { tenantId } from '../helpers/constants';
 
 export class UserController {
 
-    public listAllUsers(res: Response) {
-        res.status(200).json([])
+    public listAllUsers(req: Request, res: Response) {
+        getTenantBoundUserModel(req).find({}, (err: any, response: any) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.status(200).json(response);
+        });
     }
 
     public async createNewUser(req: Request, res: Response) {

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response } from 'express';
 import * as bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -16,6 +16,7 @@ import { FeedbackRoutes } from './routes/feedbackRoutes';
 import { jwtStrategy } from './helpers/jwtStrategy';
 import { AuthRoutes } from './routes/authRoutes';
 import { TenantRoutes } from './routes/tenantRoutes';
+import { errorCodes } from './helpers/constants';
 
 class App {
 
@@ -40,15 +41,15 @@ class App {
         this.initializeGraphQL();
 
         this.app.use('/api/auth', this.authRoutes.getAllRoutes());
-        this.app.use('/api/tenants', this.getPassportAuthenticatorMiddleware(), this.tenantRoutes.getAllRoutes());
-        this.app.use('/api/users', this.getPassportAuthenticatorMiddleware(), this.userRoutes.getAllRoutes());
-        this.app.use('/api/departments', this.getPassportAuthenticatorMiddleware(), this.departmentRoutes.getAllRoutes());
-        this.app.use('/api/classes', this.getPassportAuthenticatorMiddleware(), this.classRoutes.getAllRoutes());
-        this.app.use('/api/subjects', this.getPassportAuthenticatorMiddleware(), this.subjectRoutes.getAllRoutes());
-        this.app.use('/api/faculties', this.getPassportAuthenticatorMiddleware(), this.facultyRoutes.getAllRoutes());
-        this.app.use('/api/students', this.getPassportAuthenticatorMiddleware(), this.studentRoutes.getAllRoutes());
-        this.app.use('/api/feedbacks', this.getPassportAuthenticatorMiddleware(), this.feedbackRoutes.getAllRoutes());
-        this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
+        this.app.use('/api/tenants', this.getPassportAuthenticatorMiddleware, this.tenantRoutes.getAllRoutes());
+        this.app.use('/api/users', this.getPassportAuthenticatorMiddleware, this.userRoutes.getAllRoutes());
+        this.app.use('/api/departments', this.getPassportAuthenticatorMiddleware, this.departmentRoutes.getAllRoutes());
+        this.app.use('/api/classes', this.getPassportAuthenticatorMiddleware, this.classRoutes.getAllRoutes());
+        this.app.use('/api/subjects', this.getPassportAuthenticatorMiddleware, this.subjectRoutes.getAllRoutes());
+        this.app.use('/api/faculties', this.getPassportAuthenticatorMiddleware, this.facultyRoutes.getAllRoutes());
+        this.app.use('/api/students', this.getPassportAuthenticatorMiddleware, this.studentRoutes.getAllRoutes());
+        this.app.use('/api/feedbacks', this.getPassportAuthenticatorMiddleware, this.feedbackRoutes.getAllRoutes());
+        this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes);
     }
 
     private config(): void {
@@ -57,7 +58,7 @@ class App {
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(morgan('combined'));
         passport.use(jwtStrategy);
-        this.app.post('/graphql', this.getPassportAuthenticatorMiddleware());
+        this.app.post('/graphql', this.getPassportAuthenticatorMiddleware);
     }
 
     initializeGraphQL() {
@@ -73,8 +74,21 @@ class App {
         });
     }
 
-    private getPassportAuthenticatorMiddleware() {
-        return passport.authenticate('jwt', { session: false });
+    private getPassportAuthenticatorMiddleware(req: any, res: any, next: any) {
+        return passport.authenticate('jwt', { session: false }, function (err, user) {
+            if (err || !user) {
+                return res.status(401).send({
+                    error: {
+                        code: errorCodes.AUTH_FAILED,
+                        message: "Your session is not valid, you have to login again!",
+                        details: err
+                    }
+                });
+            }
+            else {
+                return next();
+            }
+        })(req, res, next);
     }
 }
 

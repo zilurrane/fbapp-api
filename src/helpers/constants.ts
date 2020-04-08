@@ -9,7 +9,8 @@ export const userRoles = [
 export const studentRoleValue = 5;
 
 export const errorCodes = {
-    INSERT_FAILED: 9001
+    INSERT_FAILED: 9001,
+    AUTH_FAILED: 401
 }
 
 export const tenantId = "1";

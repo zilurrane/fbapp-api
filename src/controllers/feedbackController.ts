@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getTenantBoundFeedbackModel } from '../models/feedback.model';
 import IHttpResponse from '../interfaces/httpResponse.interface';
-import { errorCodes, tenantId } from '../helpers/constants';
+import { errorCodes } from '../helpers/constants';
 
 export class FeedbackController {
 

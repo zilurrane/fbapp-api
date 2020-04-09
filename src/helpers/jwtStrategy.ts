@@ -1,5 +1,5 @@
 import { Strategy, ExtractJwt } from 'passport-jwt'
-import { getTenantBoundUserModel } from '../models/user.model';
+import { UserModel } from '../models/user.model';
 import { jwtSecretKey } from './constants';
 
 const opts = {
@@ -9,7 +9,7 @@ const opts = {
 
 export const jwtStrategy = new Strategy(opts, (jwt_payload: any, done: any) => {
     const { tenantId, userName } = jwt_payload;
-    getTenantBoundUserModel({ user: { tenantId } }).findOne({ userName }, (err: any, user: any) => { // TODO: Implement interfaces
+    UserModel.findOne({ userName, tenantId }, (err: any, user: any) => { // TODO: Implement interfaces
         if (err) {
             return done(err, false)
         }

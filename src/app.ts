@@ -86,6 +86,7 @@ class App {
                 });
             }
             else {
+                req.user = user;
                 return next();
             }
         })(req, res, next);

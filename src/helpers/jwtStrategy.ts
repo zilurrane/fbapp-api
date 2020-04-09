@@ -20,3 +20,7 @@ export const jwtStrategy = new Strategy(opts, (jwt_payload: any, done: any) => {
         }
     })
 })
+
+export const generatePassword = (req: any) => {
+    return req.body.userName;
+}

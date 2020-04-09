@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { getTenantBoundUserModel } from '../models/user.model';
+import { generatePassword } from '../helpers/jwtStrategy';
 
 export class UserController {
 
@@ -13,6 +14,7 @@ export class UserController {
     }
 
     public async createNewUser(req: Request, res: Response) {
+        if(!req.body['password']) req.body['password'] = generatePassword(req);
         const userRecordToInsert = new (getTenantBoundUserModel(req))(req.body);
         const userRecordResponse = await userRecordToInsert.save();
         if (userRecordResponse && userRecordResponse._id) {
@@ -20,5 +22,5 @@ export class UserController {
         } else {
             res.status(500).json(userRecordResponse);
         }
-    }
+    }    
 }

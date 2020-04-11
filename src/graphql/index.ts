@@ -7,7 +7,5 @@ export default new ApolloServer({
     resolvers,
     playground: true,
     introspection: true,
-    context: ({ req }) => ({
-        user: req.user
-    })
+    context: ({ req }) => req,
 });

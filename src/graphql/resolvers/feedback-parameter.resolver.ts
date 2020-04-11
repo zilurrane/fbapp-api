@@ -2,12 +2,12 @@ import { getTenantBoundFeedbackParameterModel } from '../../models/feedback-para
 
 export default {
     Query: {
-        feedbackParameters: async (_parent: any, _args: any, { user } : any) => await getTenantBoundFeedbackParameterModel(user).find({}).exec(),
+        feedbackParameters: async (_parent: any, _args: any, context : any) => await getTenantBoundFeedbackParameterModel(context).find({}).exec(),
     },
     Mutation: {
-        addFeedbackParameter: async (_parent: any, args: any, { user } : any) => {
+        addFeedbackParameter: async (_parent: any, args: any, context : any) => {
             try {
-                const feedbackParameterToInsert = new (getTenantBoundFeedbackParameterModel(user))(args);
+                const feedbackParameterToInsert = new (getTenantBoundFeedbackParameterModel(context))(args);
                 let response = await feedbackParameterToInsert.save();
                 return response;
             } catch (e) {

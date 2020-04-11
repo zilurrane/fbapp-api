@@ -24,7 +24,7 @@ export class UserController {
     }
 
     public async createNewUser(req: Request, res: Response) {
-        if(!req.body['password']) req.body['password'] = generatePassword(req);
+        if (!req.body['password']) req.body['password'] = generatePassword(req);
         const userRecordToInsert = new (getTenantBoundUserModel(req))(req.body);
         const userRecordResponse = await userRecordToInsert.save();
         if (userRecordResponse && userRecordResponse._id) {
@@ -32,5 +32,15 @@ export class UserController {
         } else {
             res.status(500).json(userRecordResponse);
         }
-    }    
+    }
+
+    public async updateUser(req: Request, res: Response) {
+        const { query, data } = req.body;
+        getTenantBoundUserModel(req).findOneAndUpdate(query, data, (err: any, response: any) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.status(200).json(response);
+        });
+    }
 }

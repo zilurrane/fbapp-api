@@ -18,6 +18,9 @@ export class UserRoutes {
         routes.route('/register')
             .post(this.userController.createNewUser)
 
+        routes.route('/update')
+            .put(this.userController.updateUser)
+
         return routes;
     }
 }

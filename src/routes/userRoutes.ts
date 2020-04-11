@@ -10,7 +10,7 @@ export class UserRoutes {
         const routes = Router();
 
         routes.route('/')
-            .get(this.userController.listAllNonStudentAccessibleUsers)
+            .get(this.userController.listAllAccessibleUsers)
 
         routes.route('/all')
             .get(this.userController.listAllUsers)

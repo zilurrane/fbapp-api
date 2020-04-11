@@ -8,6 +8,8 @@ export const userRoles = [
 
 export const studentRoleValue = 5;
 
+export const teacherRoleValue = 4;
+
 export const errorCodes = {
     INSERT_FAILED: 9001,
     AUTH_FAILED: 401

@@ -5,8 +5,8 @@ import { studentRoleValue } from '../helpers/constants';
 
 export class UserController {
 
-    public listAllNonStudentUsers(req: Request, res: Response) {
-        getTenantBoundUserModel(req).find({ role: { $ne: studentRoleValue } }, (err: any, response: any) => {
+    public listAllNonStudentAccessibleUsers(req: any, res: Response) {
+        getTenantBoundUserModel(req).find({ role: { $lt: studentRoleValue, $gt: req.user.role } }, (err: any, response: any) => {
             if (err) {
                 res.status(500).send(err);
             }

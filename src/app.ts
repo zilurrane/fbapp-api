@@ -49,7 +49,7 @@ class App {
         this.app.use('/api/faculties', this.getPassportAuthenticatorMiddleware, this.facultyRoutes.getAllRoutes());
         this.app.use('/api/students', this.getPassportAuthenticatorMiddleware, this.studentRoutes.getAllRoutes());
         this.app.use('/api/feedbacks', this.getPassportAuthenticatorMiddleware, this.feedbackRoutes.getAllRoutes());
-        this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes);
+        this.app.use('/api/healthcheck', this.healthCheckRoutes.getAllRoutes());
     }
 
     private config(): void {

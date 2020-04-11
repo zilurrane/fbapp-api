@@ -10,6 +10,9 @@ export class UserRoutes {
         const routes = Router();
 
         routes.route('/')
+            .get(this.userController.listAllNonStudentUsers)
+
+        routes.route('/all')
             .get(this.userController.listAllUsers)
 
         routes.route('/register')

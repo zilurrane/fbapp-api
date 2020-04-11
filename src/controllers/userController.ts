@@ -1,8 +1,18 @@
 import { Request, Response } from 'express'
 import { getTenantBoundUserModel } from '../models/user.model';
 import { generatePassword } from '../helpers/jwtStrategy';
+import { studentRoleValue } from '../helpers/constants';
 
 export class UserController {
+
+    public listAllNonStudentUsers(req: Request, res: Response) {
+        getTenantBoundUserModel(req).find({ role: { $ne: studentRoleValue } }, (err: any, response: any) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.status(200).json(response);
+        });
+    }
 
     public listAllUsers(req: Request, res: Response) {
         getTenantBoundUserModel(req).find({}, (err: any, response: any) => {

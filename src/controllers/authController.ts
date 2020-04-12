@@ -16,7 +16,7 @@ export class AuthController {
                 if (isMatch && !err) {
                     let roleSpecificUserData: any = {};
                     if (user.role === studentRoleValue) {
-                        const roleSpecificUserDataResponse: any = await getTenantBoundStudentModel(user.tenantId).findOne({ user: user._id }).exec();
+                        const roleSpecificUserDataResponse: any = await getTenantBoundStudentModel({ user }).findOne({ user: user._id }).exec();
                         if (roleSpecificUserDataResponse) {
                             roleSpecificUserData = {
                                 departmentCode: roleSpecificUserDataResponse.departmentCode,

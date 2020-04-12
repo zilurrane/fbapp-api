@@ -10,7 +10,10 @@ export class AuthRoutes {
         const routes = Router();
 
         routes.route('/login')
-            .post(this.authController.login)
+            .post(this.authController.login);
+
+        routes.route('/account/confirm')
+            .post(this.authController.confirmAccount);
 
         return routes;
     }

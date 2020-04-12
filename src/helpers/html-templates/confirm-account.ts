@@ -1,4 +1,4 @@
-export const getConfirmAccountTemplate = () => `<!DOCTYPE html>
+export const getConfirmAccountTemplate = (userName: string, token: string) => `<!DOCTYPE html>
 <html>
 <head>
     <title></title>
@@ -106,7 +106,7 @@ export const getConfirmAccountTemplate = () => `<!DOCTYPE html>
     <!-- HIDDEN PREHEADER TEXT -->
     <div
         style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
-        We're thrilled to have you here! Get ready to dive into your new account.
+        Hey ${userName}, We're thrilled to have you here! Get ready to dive into your new account.
     </div>
 
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -187,7 +187,7 @@ export const getConfirmAccountTemplate = () => `<!DOCTYPE html>
                                         <table border="0" cellspacing="0" cellpadding="0">
                                             <tr>
                                                 <td align="center" style="border-radius: 3px;" bgcolor="#4ce1b6"><a
-                                                        href="https://fbapp.cfapps.io/" target="_blank"
+                                                        href="https://fbapp.cfapps.io/auth/verify/${token}" target="_blank"
                                                         style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #4ce1b6; display: inline-block;">Confirm
                                                         Account</a></td>
                                             </tr>
@@ -209,8 +209,8 @@ export const getConfirmAccountTemplate = () => `<!DOCTYPE html>
                     <tr>
                         <td bgcolor="#ffffff" align="left"
                             style="padding: 20px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;"><a href="https://fbapp.cfapps.io/" target="_blank"
-                                    style="color: #4ce1b6;">https://fbapp.cfapps.io/</a></p>
+                            <p style="margin: 0;"><a href="https://fbapp.cfapps.io/auth/verify/${token}" target="_blank"
+                                    style="color: #4ce1b6;">https://fbapp.cfapps.io/auth/verify/${token}</a></p>
                         </td>
                     </tr>
                     <!-- COPY -->

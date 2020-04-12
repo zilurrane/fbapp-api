@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { getTenantBoundUserModel } from '../models/user.model';
 import { generatePassword } from '../helpers/jwtStrategy';
 import { teacherRoleValue } from '../helpers/constants';
+import { sendAccountConfirmationEmail } from '../helpers/email-helper';
 
 export class UserController {
 
@@ -26,8 +27,10 @@ export class UserController {
     public async createNewUser(req: Request, res: Response) {
         if (!req.body['password']) req.body['password'] = generatePassword(req);
         const userRecordToInsert = new (getTenantBoundUserModel(req))(req.body);
-        const userRecordResponse = await userRecordToInsert.save();
+        let userRecordResponse = await userRecordToInsert.save();
         if (userRecordResponse && userRecordResponse._id) {
+            await userRecordResponse.generateVerificationToken();
+            await sendAccountConfirmationEmail(userRecordResponse);
             res.status(200).json(userRecordResponse);
         } else {
             res.status(500).json(userRecordResponse);

@@ -17,7 +17,7 @@ export class HealthCheckController {
         const fromMail = senderEmail;
         const toMail = senderEmail;
         const subject = 'Welcome to FbApp, Confirm Your Account!';
-        const html = getConfirmAccountTemplate();
+        const html = getConfirmAccountTemplate('Test', '68769876767867867676767hghjgjhghf');
 
         // auth
         const transporter = createTransport({

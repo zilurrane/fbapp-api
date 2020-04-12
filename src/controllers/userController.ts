@@ -29,8 +29,8 @@ export class UserController {
         const userRecordToInsert = new (getTenantBoundUserModel(req))(req.body);
         let userRecordResponse = await userRecordToInsert.save();
         if (userRecordResponse && userRecordResponse._id) {
-            await userRecordResponse.generateVerificationToken();
-            await sendAccountConfirmationEmail(userRecordResponse);
+            const token = await userRecordResponse.generateVerificationToken();
+            await sendAccountConfirmationEmail(userRecordResponse, token);
             res.status(200).json(userRecordResponse);
         } else {
             res.status(500).json(userRecordResponse);

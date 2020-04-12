@@ -6,7 +6,6 @@ import { getTenantBoundStudentModel } from '../models/Student.model';
 
 export class AuthController {
 
-    // TODO: Refactor this
     public async login(req: Request, res: Response) {
         const { userName, password } = req.body;
         const user: any = await UserModel.findOne({ userName }).exec();

@@ -73,7 +73,7 @@ UserSchema.methods.generateVerificationToken = async function () {
         token: crypto.randomBytes(20).toString('hex')
     };
     const token = jwt.sign(payload, jwtSecretKey);
-    this.verificationToken = token;
+    this.verificationToken = payload.token;
     await this.save();
     return token
 };

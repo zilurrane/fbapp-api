@@ -1,18 +1,22 @@
 import { Request, Response } from 'express';
 import { getTenantBoundStudentModel } from '../models/Student.model';
 import { getTenantBoundUserModel } from '../models/user.model';
-import { studentRoleValue, tenantId } from '../helpers/constants';
+import { studentRoleValue } from '../helpers/constants';
+import { TenantModel } from '../models/tenant.model';
 
 export class StudentController {
 
     public async generateStudents(req: Request, res: Response) {
         const { departmentCode, classCode, startingRollNumber, endingRollNumber } = req.body;
 
-        const getStudentUserName = (departmentCode: string, classCode: string, rollNumber: number) => `${departmentCode}${classCode}${rollNumber}`;
+        const getStudentUserName = (tenantCode: string, departmentCode: string, classCode: string, rollNumber: number) => `${tenantCode}${departmentCode}${classCode}${rollNumber}`;
+
+        const getTenantId = (req: any) => req.user.tenantId == '0' ? req.header('TenantId') : req.user.tenantId;
 
         let newStudents: any[] = [];
+        const tenantRecord = await TenantModel.findById(getTenantId(req));
         for (let currentStudentRollNumber: number = startingRollNumber; currentStudentRollNumber <= endingRollNumber; currentStudentRollNumber++) {
-            const userName = getStudentUserName(departmentCode, classCode, currentStudentRollNumber);
+            const userName = getStudentUserName(tenantRecord.code, departmentCode, classCode, currentStudentRollNumber);
             const userRecordToInsert = new (getTenantBoundUserModel(req))({
                 userName,
                 password: userName,

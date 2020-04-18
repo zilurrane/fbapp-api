@@ -50,20 +50,22 @@ export class AuthController {
     public async confirmAccount(req: Request, res: Response) {
         try {
             const { token } = req.body;
-            if (!token) res.status(400).send({ error: { message: 'Account confirmation link is not valid!' } });
+            if (!token) res.status(400).send({ error: { message: 'Account verification link is not valid!' } });
             const decoded: any = jwt.verify(token, jwtSecretKey);
-            if (!decoded || !decoded.userId || !decoded.token) res.status(400).send({ error: { message: 'Account confirmation link is not valid!' } });
+            if (!decoded || !decoded.userId || !decoded.token) res.status(400).send({ error: { message: 'Account verification link is not valid!' } });
             const user: any = await UserModel.findOne({ _id: decoded.userId, verificationToken: decoded.token }).exec();
             if (!user) {
                 res.status(400).send({ error: { message: 'Account confirmation link is not valid!' } });
+            } else if (user.isActive) {
+                res.status(200).send({ data: { message: 'Your account is already verified! Please login to start using FbApp.' } });
             }
             user.isActive = true;
-            user.verificationToken = '';
+            // user.verificationToken = '';
             await user.save();
-            res.status(200).send();
+            res.status(200).send({ data: { message: 'Your account has been verified successfully! Please login to start using FbApp.' } });
         }
         catch {
-            res.status(400).send({ error: { message: 'Account confirmation link is not valid!' } });
+            res.status(400).send({ error: { message: 'Account verification link is not valid!' } });
         }
     }
 }

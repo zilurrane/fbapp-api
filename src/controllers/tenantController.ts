@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { TenantModel } from '../models/tenant.model';
+import { getTenantBoundFeedbackParameterModel } from '../models/feedback-parameter.model';
+import { feedbackParameters } from '../helpers/constants';
 
 export class TenantController {
 
@@ -21,6 +23,7 @@ export class TenantController {
         const recordToInsert = new TenantModel(req.body);
         const response = await recordToInsert.save();
         if (response && response._id) {
+            await getTenantBoundFeedbackParameterModel({ user: { tenantId: response._id } }).insertMany(feedbackParameters);
             res.status(200).json(response);
         } else {
             res.status(500).json(response);

@@ -1,6 +1,7 @@
 ---
 applications:
-- name: fbapp-api
+- name: run-fbapp-api
+  memory: 256M
   buildpacks:
     - nodejs_buildpack
   commands:

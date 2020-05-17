@@ -45,14 +45,33 @@ export class SubjectController {
         });
     }
 
-    public addUpdateSubjectFacultyLink(req: Request, res: Response) {
+    public async addUpdateSubjectFacultyLink(req: Request, res: Response) {
         const requestBody = req.body;
-        getTenantBoundSubjectFacultyLinkModel(req).insertMany(requestBody, (err: any, response: any) => {
-            if (err) {
-                res.send(err);
+        let recordsToInsert: any[] = [], recordsToUpdate: any[] = [];
+        requestBody.forEach((record: any) => {
+            if (record.id) {
+                recordsToUpdate.push(record)
+            } else {
+                recordsToInsert.push(record);
             }
-            res.json(response);
         });
+        let insertedRecords, updatedRecords;
+        if (recordsToInsert.length !== 0) {
+            insertedRecords = await getTenantBoundSubjectFacultyLinkModel(req).insertMany(recordsToInsert);
+        }
+        if (recordsToUpdate.length !== 0) {
+            let bulkUpdateRequest: any[] = [];
+            recordsToUpdate.forEach((record: any) => {
+                bulkUpdateRequest.push({
+                    updateOne: {
+                        filter: { _id: record.id },
+                        update: { ...record }
+                    }
+                });
+            });
+            updatedRecords = await getTenantBoundSubjectFacultyLinkModel(req).bulkWrite(bulkUpdateRequest);
+        }
+        res.status(200).send({ insertedRecords, updatedRecords });
     }
 
     public getLinkedFacultiesBySubjectId(req: Request, res: Response) {

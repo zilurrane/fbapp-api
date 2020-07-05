@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { UserModel } from '../models/user.model';
 import { studentRoleValue, jwtSecretKey, jwtExpiryTime } from '../helpers/constants';
-import { getTenantBoundStudentModel } from '../models/Student.model';
+import { getTenantBoundStudentModel } from '../models/student.model';
 
 export class AuthController {
 

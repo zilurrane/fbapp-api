@@ -15,6 +15,9 @@ export class FacultyRoutes {
         routes.route('/add')
             .post(this.controller.addNewFaculty)
 
+        routes.route('/update')
+            .put(this.controller.updateFaculty)
+
         routes.route('/department/:departmentCode')
             .get(this.controller.getAllFacultiesByDepartmentCode)
 

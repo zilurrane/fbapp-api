@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getTenantBoundStudentModel } from '../models/Student.model';
+import { getTenantBoundStudentModel } from '../models/student.model';
 import { getTenantBoundUserModel } from '../models/user.model';
 import { studentRoleValue } from '../helpers/constants';
 import { TenantModel } from '../models/tenant.model';

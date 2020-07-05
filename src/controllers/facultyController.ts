@@ -15,6 +15,16 @@ export class FacultyController {
         });
     }
 
+    public async updateFaculty(req: Request, res: Response) {
+        const { query, data } = req.body;
+        getTenantBoundFacultyModel(req).findOneAndUpdate(query, data, (err: any, response: any) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.status(200).json(response);
+        });
+    }
+
     public getAllFaculties(req: Request, res: Response) {
         getTenantBoundFacultyModel(req).find({}, (err: any, response: any) => {
             if (err) {

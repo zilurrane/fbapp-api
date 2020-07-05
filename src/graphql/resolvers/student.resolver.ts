@@ -1,4 +1,4 @@
-import { getTenantBoundStudentModel } from '../../models/Student.model';
+import { getTenantBoundStudentModel } from '../../models/student.model';
 
 export default {
     Query: {

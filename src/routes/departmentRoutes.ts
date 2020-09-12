@@ -15,6 +15,9 @@ export class DepartmentRoutes {
         routes.route('/add')
             .post(this.controller.addNewDepartment)
 
+        routes.route('/update')
+            .put(this.controller.updateDepartment)
+
         return routes;
     }
 }

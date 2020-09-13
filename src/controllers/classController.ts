@@ -14,6 +14,16 @@ export class ClassController {
         });
     }
 
+    public async updateClass(req: Request, res: Response) {
+        const { query, data } = req.body;
+        getTenantBoundClassModel(req).findOneAndUpdate(query, data, (err: any, response: any) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.status(200).json(response);
+        });
+    }
+
     public getAllClasses(req: Request, res: Response) {
         getTenantBoundClassModel(req).find({}, (err: any, response: any) => {
             if (err) {

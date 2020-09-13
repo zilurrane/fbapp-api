@@ -14,7 +14,10 @@ export class ClassRoutes {
 
         routes.route('/add')
             .post(this.controller.addNewClass)
-        
+
+        routes.route('/update')
+            .put(this.controller.updateClass)
+
         routes.route('/department/:departmentCode')
             .get(this.controller.getAllClassesByDepartmentCode)
 

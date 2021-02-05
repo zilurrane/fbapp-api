@@ -58,7 +58,7 @@ UserSchema.pre('save', function (next) {
     }
 })
 
-UserSchema.methods.comparePassword = function (pw: string, cb: any) {
+UserSchema.methods.comparePassword = function (this: any, pw: string, cb: any) {
     bcrypt.compare(pw, this.password, (err, isMatch) => {
         if (err) {
             return cb(err)
@@ -67,7 +67,7 @@ UserSchema.methods.comparePassword = function (pw: string, cb: any) {
     })
 }
 
-UserSchema.methods.generateVerificationToken = async function () {
+UserSchema.methods.generateVerificationToken = async function (this: any) {
     const payload = {
         userId: this._id,
         token: crypto.randomBytes(20).toString('hex')

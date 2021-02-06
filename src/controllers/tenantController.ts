@@ -29,4 +29,14 @@ export class TenantController {
             res.status(500).json(response);
         }
     }
+
+    public async updateTenant(req: Request, res: Response) {
+        const { query, data } = req.body;
+        TenantModel(req).findOneAndUpdate(query, data, (err: any, response: any) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.status(200).json(response);
+        });
+    }
 }

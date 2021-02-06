@@ -11,9 +11,8 @@ export class TenantRoutes {
 
         routes.route('/')
             .get(this.tenantController.getAllTenants)
-
-        routes.route('/create')
             .post(this.tenantController.createNewTenant)
+            .patch(this.tenantController.updateTenant)
 
         return routes;
     }

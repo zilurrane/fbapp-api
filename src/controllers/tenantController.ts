@@ -32,7 +32,7 @@ export class TenantController {
 
     public async updateTenant(req: Request, res: Response) {
         const { query, data } = req.body;
-        TenantModel(req).findOneAndUpdate(query, data, (err: any, response: any) => {
+        TenantModel.findOneAndUpdate(query, data, (err: any, response: any) => {
             if (err) {
                 res.status(500).send(err);
             }

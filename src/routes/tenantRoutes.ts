@@ -12,7 +12,7 @@ export class TenantRoutes {
         routes.route('/')
             .get(this.tenantController.getAllTenants)
             .post(this.tenantController.createNewTenant)
-            .patch(this.tenantController.updateTenant)
+            .put(this.tenantController.updateTenant)
 
         return routes;
     }
